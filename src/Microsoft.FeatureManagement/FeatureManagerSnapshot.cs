@@ -42,17 +42,7 @@ namespace Microsoft.FeatureManagement
             }
         }
 
-        public Task<bool> IsEnabledAsync(string feature)
-        {
-#if NETSTANDARD2_0
-            return _flagCache.GetOrAdd(feature, arg => _featureManager.IsEnabledAsync(arg));
-#else
-            return _flagCache.GetOrAdd(
-                feature,
-                (arg, fm) => fm.IsEnabledAsync(arg),
-                _featureManager);
-#endif
-        }
+        public Task<bool> IsEnabledAsync(string feature) => IsEnabledAsync<object>(feature, null);
 
         public Task<bool> IsEnabledAsync<TContext>(string feature, TContext context)
         {
